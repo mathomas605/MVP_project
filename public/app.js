@@ -16,6 +16,7 @@ const fetchToDoItems = () => {
   fetch("/tododb/to_do_list")
     .then((response) => response.json())
     .then((data) => {
+      console.log(data);
       // Sort items into completed, urgent, and to-do
       const completedItems = data.filter((item) => item.completed);
       const urgentItems = data.filter((item) => item.urgent && !item.completed);
