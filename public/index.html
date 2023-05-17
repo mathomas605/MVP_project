@@ -16,14 +16,24 @@
   <body>
     <h1>To Do List</h1>
     <div id="control" class="king_div">
-      <div id="user_input" class="input_div">
-        <input type="text" class="username" />
+      <!-- <div id="user_input" class="input_div">
+        <p>user-name</p>
+        <input type="text" id="username_input" class="username" /> 
+      </div>-->
+      <div id="urgent" class="urgent">
+        <ul id="urgent_list" class="urgent"></ul>
       </div>
-      <div id="urgent">
-        <ul id="urgent_list"></ul>
+      <div id="to_do_creation" class="creation">
+        <p>task to complete</p>
+        <input type="text" id="task" />
+        <p>what needs done</p>
+        <input type="text" id="description" />
+        <p>urgent</p>
+        <input type="checkbox" id="urgent" />
+        <button id="create">Create</button>
       </div>
       <div id="not_urgent">
-        <ul id="to_do_list"></ul>
+        <ul id="to_do_list" class="list"></ul>
       </div>
       <div id="completed">
         <ul id="completed_to_do"></ul>
