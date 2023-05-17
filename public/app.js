@@ -23,15 +23,15 @@ const fetchToDoItems = () => {
       const todoItems = data.filter((item) => !item.urgent && !item.completed);
 
       completedItems.forEach((item) => {
-        $completed.append(`<li>${item.task}${item.description}/li>`);
+        $completed.append(`<li>${item.task} ${item.description}/li>`);
       });
 
       urgentItems.forEach((item) => {
-        $urgentListItem.append(`<li>${item.task}${item.description}</li>`);
+        $urgentListItem.append(`<li>${item.task} ${item.description}</li>`);
       });
 
       todoItems.forEach((item) => {
-        const $li = $(`<li>${item.task}${item.description}</li>`);
+        const $li = $(`<li>${item.task} ${item.description}</li>`);
 
         $li.click(() => {
           editItem(
