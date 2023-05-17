@@ -17,7 +17,7 @@ const fetchToDoItems = () => {
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
-      // Sort items into completed, urgent, and to-do
+      //===Sort items into completed, urgent, and to-do===
       const completedItems = data.filter((item) => item.completed);
       const urgentItems = data.filter((item) => item.urgent && !item.completed);
       const todoItems = data.filter((item) => !item.urgent && !item.completed);
@@ -64,7 +64,7 @@ const editItem = (id, task, description, urgent, completed) => {
   console.log("Editing item:", id, task, description, urgent, completed);
 };
 
-//===Function to toggle the completion status of a to-do item===
+///===Function to toggle the completion status of a to-do item===
 const toggleItemCompletion = (id, completed) => {
   fetch(`/tododb/to_do_list/${id}`, {
     method: "PATCH",
@@ -82,6 +82,7 @@ const toggleItemCompletion = (id, completed) => {
     })
     .catch((error) => {
       console.error("Failed to toggle item completion:", error);
+      console.log(error.response);
     });
 };
 
