@@ -23,30 +23,24 @@ const fetchToDoItems = () => {
       const todoItems = data.filter((item) => !item.urgent && !item.completed);
 
       completedItems.forEach((item) => {
-        $completed.append(`<li>${item.task} ${item.description}/li>`);
+        $completed.append(`<li>${item.task}/li>`);
       });
 
       urgentItems.forEach((item) => {
-        $urgentListItem.append(`<li>${item.task} ${item.description}</li>`);
+        $urgentListItem.append(`<li>${item.task}- ${item.description}</li>`);
       });
 
       todoItems.forEach((item) => {
-        const $li = $(`<li>${item.task} ${item.description}</li>`);
+        const $li = $(`<li>${item.task}- ${item.description}</li>`);
 
-        $li.click(() => {
-          editItem(
-            item.id,
-            item.task,
-            item.description,
-            item.urgent,
-            item.completed
-          );
+        $li.on("click", () => {
+          editItem(item.task, item.description, item.urgent, item.completed);
         });
 
         const $toggleBtn = $(
           `<button>${item.completed ? "Uncomplete" : "Complete"}</button>`
         );
-        $toggleBtn.click(() => {
+        $toggleBtn.on("click", () => {
           toggleItemCompletion(item.id, !item.completed);
         });
 
@@ -72,7 +66,7 @@ const toggleItemCompletion = (id, completed) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      completed: completed,
+      completed: true,
     }),
   })
     .then((response) => response.json())

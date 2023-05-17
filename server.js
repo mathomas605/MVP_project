@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 //======set up =================
 dotenv.config();
 const app = express();
-const PORT = 7502;
+const PORT = 7504;
 const db = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
 });
