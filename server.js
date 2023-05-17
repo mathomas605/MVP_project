@@ -74,7 +74,6 @@ app.post("/tododb/user_data", (req, res) => {
     });
 });
 
-/*===patch route===*/
 app.patch("/tododb/to_do_list/:id", (req, res) => {
   const { id } = req.params;
   if (Number.isNaN(id)) {
@@ -83,38 +82,37 @@ app.patch("/tododb/to_do_list/:id", (req, res) => {
   }
   const { task, description, urgent, completed } = req.body;
 
-  // Build the SQL query based on the provided fields in the request body
   const updateQuery = [];
   const queryParams = [];
 
   if (task) {
-    updateQuery.push("task = $1");
     queryParams.push(task);
+    updateQuery.push(`task = $${queryParams.length}`);
   }
 
   if (description) {
-    updateQuery.push("description = $2");
     queryParams.push(description);
+    updateQuery.push(`description = $${queryParams.length}`);
   }
 
   if (typeof urgent === "boolean") {
-    updateQuery.push("urgent = $3");
     queryParams.push(urgent);
+    updateQuery.push(`urgent = $${queryParams.length}`);
   }
 
   if (typeof completed === "boolean") {
-    updateQuery.push("completed = $4");
     queryParams.push(completed);
+    updateQuery.push(`completed = $${queryParams.length}`);
   }
 
   // Add the ID parameter at the end
   queryParams.push(id);
 
-  // Construct the final update query string
+  // Construct the final update query string with parameterized query
   const updateQueryString = `UPDATE to_do_list SET ${updateQuery.join(
     ", "
-  )} WHERE id = $${queryParams.length} RETURNING *`;
-
+  )} WHERE ID = $${queryParams.length} RETURNING *`;
+  console.log(updateQuery, queryParams, updateQueryString);
   // Execute the update query
   db.query(updateQueryString, queryParams)
     .then((data) => {
@@ -125,6 +123,7 @@ app.patch("/tododb/to_do_list/:id", (req, res) => {
       res.sendStatus(500);
     });
 });
+
 /*===delete route===*/
 app.delete("/tododb/to_do_list/:id", (req, res) => {
   const { id } = req.params;

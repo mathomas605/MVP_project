@@ -1,6 +1,6 @@
 //=====set up===========
 const $listItem = $("#to_do_list");
-const $urgentListItem = $(".urgent");
+const $urgentListItem = $("#urgent_list");
 const $completed = $("#completed_to_do");
 const $task = $("#task");
 const $description = $("#description");
@@ -23,11 +23,35 @@ const fetchToDoItems = () => {
       const todoItems = data.filter((item) => !item.urgent && !item.completed);
 
       completedItems.forEach((item) => {
-        $completed.append(`<li>${item.task}/li>`);
+        const $li = $completed.append(`<li>${item.task}</li>`);
+        const $toggleBtn = $(
+          `<button>${item.completed ? "Uncomplete" : "Complete"}</button>`
+        );
+        $toggleBtn.on("click", () => {
+          toggleItemCompletion(item.id, !item.completed);
+        });
+        $completed.append($toggleBtn);
       });
 
       urgentItems.forEach((item) => {
-        $urgentListItem.append(`<li>${item.task}- ${item.description}</li>`);
+        const $li = $urgentListItem.append(
+          `<li>${item.task}- ${item.description}</li>`
+        );
+
+        $li.on("click", () => {
+          editItem(item.task, item.description, item.urgent, item.completed);
+        });
+
+        const $toggleBtn = $(
+          `<button>${item.completed ? "Uncomplete" : "Complete"}</button>`
+        );
+
+        $toggleBtn.on("click", () => {
+          toggleItemCompletion(item.id, !item.completed);
+        });
+
+        $urgentListItem.append($toggleBtn);
+        $urgentListItem.append($li);
       });
 
       todoItems.forEach((item) => {
@@ -66,7 +90,7 @@ const toggleItemCompletion = (id, completed) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      completed: true,
+      completed: completed,
     }),
   })
     .then((response) => response.json())
