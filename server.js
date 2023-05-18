@@ -128,9 +128,9 @@ app.patch("/tododb/to_do_list/:id", (req, res) => {
 app.delete("/tododb/to_do_list/:id", (req, res) => {
   const { id } = req.params;
 
-  db.query("DELETE FROM to_do_list WHERE id = $1", [id])
+  db.query("DELETE FROM to_do_list WHERE id = $1 RETURNING *", [id])
     .then(() => {
-      res.sendStatus(204);
+      res.sendStatus(204).send(data.rows[0]);
     })
     .catch((err) => {
       console.error("Error deleting to-do item:", err);

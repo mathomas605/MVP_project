@@ -1,3 +1,5 @@
+// import { response } from "express";
+
 //=====set up===========
 const $listItem = $("#to_do_list");
 const $urgentListItem = $("#urgent_list");
@@ -23,16 +25,21 @@ const fetchToDoItems = () => {
       const todoItems = data.filter((item) => !item.urgent && !item.completed);
 
       completedItems.forEach((item) => {
+        const $deleteBtn = $(`<button id="delete">X</button>`);
         const $li = $(`<li>${item.task}</li>`);
         const $toggleBtn = $(
           `<input type="checkbox"${
             item.completed ? "Uncomplete" : "Complete"
           }/>`
         );
+        $deleteBtn.on("click", () => {
+          deleteToDo(item.id);
+        });
         $toggleBtn.on("click", () => {
           toggleItemCompletion(item.id, !item.completed);
         });
         $li.append($toggleBtn);
+        $li.append($deleteBtn);
         $completed.append($li);
       });
 
@@ -205,6 +212,24 @@ const createItem = () => {
     })
     .catch((error) => {
       console.error("Failed to create new to-do item:", error);
+    });
+};
+//===remove todo item===
+const deleteToDo = (id) => {
+  console.log(id);
+  fetch(`/tododb/to_do_list/${id}`, {
+    method: "DELETE",
+  })
+    .then((response) => {
+      if (response.ok) {
+        console.log("Successfully deleted to-do item");
+        fetchToDoItems();
+      } else {
+        console.error("Failed to delete to-do item");
+      }
+    })
+    .catch((error) => {
+      console.error("Failed to delete to-do item", error);
     });
 };
 
