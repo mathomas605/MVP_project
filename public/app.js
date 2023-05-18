@@ -39,7 +39,7 @@ const fetchToDoItems = () => {
       urgentItems.forEach((item) => {
         const $li = $(`<li>${item.task}- ${item.description}</li>`);
 
-        $li.on("click", () => {
+        $li.on("click", (event) => {
           if (
             event.target.tagName !== "INPUT" &&
             event.target.tagName !== "BUTTON"
@@ -48,7 +48,7 @@ const fetchToDoItems = () => {
           }
         });
         const $urgentBtn = $(
-          `<button>${item.urgent ? "ugent" : "not_urgent"}</button>`
+          `<button>${item.urgent ? "ugent" : "not urgent"}</button>`
         );
         $urgentBtn.on("click", () => {
           toggleUrgent(item.id, !item.urgent);
@@ -81,7 +81,7 @@ const fetchToDoItems = () => {
           }
         });
         const $urgentBtn = $(
-          `<button>${item.urgent ? "ugent" : "not_ugent"}</button>`
+          `<button>${item.urgent ? "ugent" : "not ugent"}</button>`
         );
         $urgentBtn.on("click", () => {
           toggleUrgent(item.id, !item.urgent);
@@ -107,9 +107,6 @@ const fetchToDoItems = () => {
 };
 
 //===Function to edit a to-do item===
-// const editItem = (id, task, description, urgent, completed) => {
-//   console.log("Editing item:", id, task, description, urgent, completed);
-// };
 const editItem = (id, task, description) => {
   const updatedTask = prompt("Edit Task:", task);
   const updatedDescription = prompt("Edit Description:", description);

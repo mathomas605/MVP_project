@@ -6,14 +6,45 @@ body {
 
 .grid-container {
   display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: auto;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
   gap: 20px;
+}
+
+#urgent {
+  background-color: lightcoral;
+}
+
+#not_urgent {
+  background-color: cadetblue;
+}
+
+#to_do_creation {
+  background-color: moccasin;
+}
+
+#completed {
+  background-color: rgb(107, 187, 130);
 }
 
 .grid-item {
   border: 1px solid #ccc;
   padding: 20px;
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+  font-family: "Comic Sans MS", cursive;
+}
+
+button {
+  font-family: "Comic Sans MS", cursive;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+input {
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
 }
 
 .grid-item h2 {
@@ -27,29 +58,4 @@ body {
 
 .list ul li {
   margin-bottom: 5px;
-}
-
-.urgent ul li {
-  color: red;
-}
-
-@media (min-width: 600px) {
-  .grid-container {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto;
-  }
-}
-
-@media (min-width: 900px) {
-  .grid-container {
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: auto auto;
-  }
-}
-
-@media (min-width: 1200px) {
-  .grid-container {
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-template-rows: auto auto;
-  }
 }
