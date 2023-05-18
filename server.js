@@ -73,7 +73,7 @@ app.post("/tododb/user_data", (req, res) => {
       res.sendStatus(500);
     });
 });
-
+/*===PATCH route===*/
 app.patch("/tododb/to_do_list/:id", (req, res) => {
   const { id } = req.params;
   if (Number.isNaN(id)) {

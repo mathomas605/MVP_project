@@ -23,34 +23,49 @@ const fetchToDoItems = () => {
       const todoItems = data.filter((item) => !item.urgent && !item.completed);
 
       completedItems.forEach((item) => {
-        const $li = $completed.append(`<li>${item.task}</li>`);
+        const $li = $(`<li>${item.task}</li>`);
         const $toggleBtn = $(
-          `<button>${item.completed ? "Uncomplete" : "Complete"}</button>`
+          `<input type="checkbox"${
+            item.completed ? "Uncomplete" : "Complete"
+          }/>`
         );
         $toggleBtn.on("click", () => {
           toggleItemCompletion(item.id, !item.completed);
         });
-        $completed.append($toggleBtn);
+        $li.append($toggleBtn);
+        $completed.append($li);
       });
 
       urgentItems.forEach((item) => {
-        const $li = $urgentListItem.append(
-          `<li>${item.task}- ${item.description}</li>`
-        );
+        const $li = $(`<li>${item.task}- ${item.description}</li>`);
 
         $li.on("click", () => {
-          editItem(item.task, item.description, item.urgent, item.completed);
+          if (
+            event.target.tagName !== "INPUT" &&
+            event.target.tagName !== "BUTTON"
+          ) {
+            editItem(item.id, item.task, item.description);
+          }
+        });
+        const $urgentBtn = $(
+          `<button>${item.urgent ? "ugent" : "not_urgent"}</button>`
+        );
+        $urgentBtn.on("click", () => {
+          toggleUrgent(item.id, !item.urgent);
         });
 
         const $toggleBtn = $(
-          `<button>${item.completed ? "Uncomplete" : "Complete"}</button>`
+          `<input type="checkbox"${
+            item.completed ? "Uncomplete" : "Complete"
+          }/>`
         );
 
         $toggleBtn.on("click", () => {
           toggleItemCompletion(item.id, !item.completed);
         });
 
-        $urgentListItem.append($toggleBtn);
+        $li.append($toggleBtn);
+        $li.append($urgentBtn);
         $urgentListItem.append($li);
       });
 
@@ -58,17 +73,31 @@ const fetchToDoItems = () => {
         const $li = $(`<li>${item.task}- ${item.description}</li>`);
 
         $li.on("click", () => {
-          editItem(item.task, item.description, item.urgent, item.completed);
+          if (
+            event.target.tagName !== "INPUT" &&
+            event.target.tagName !== "BUTTON"
+          ) {
+            editItem(item.id, item.task, item.description);
+          }
+        });
+        const $urgentBtn = $(
+          `<button>${item.urgent ? "ugent" : "not_ugent"}</button>`
+        );
+        $urgentBtn.on("click", () => {
+          toggleUrgent(item.id, !item.urgent);
         });
 
         const $toggleBtn = $(
-          `<button>${item.completed ? "Uncomplete" : "Complete"}</button>`
+          `<input type="checkbox"${
+            item.completed ? "Uncomplete" : "Complete"
+          }/>`
         );
         $toggleBtn.on("click", () => {
           toggleItemCompletion(item.id, !item.completed);
         });
 
         $li.append($toggleBtn);
+        $li.append($urgentBtn);
         $listItem.append($li);
       });
     })
@@ -78,8 +107,33 @@ const fetchToDoItems = () => {
 };
 
 //===Function to edit a to-do item===
-const editItem = (id, task, description, urgent, completed) => {
-  console.log("Editing item:", id, task, description, urgent, completed);
+// const editItem = (id, task, description, urgent, completed) => {
+//   console.log("Editing item:", id, task, description, urgent, completed);
+// };
+const editItem = (id, task, description) => {
+  const updatedTask = prompt("Edit Task:", task);
+  const updatedDescription = prompt("Edit Description:", description);
+
+  if (updatedTask !== null && updatedDescription !== null) {
+    fetch(`/tododb/to_do_list/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        task: updatedTask,
+        description: updatedDescription,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Updated to-do item:", data);
+        fetchToDoItems();
+      })
+      .catch((error) => {
+        console.error("Failed to update to-do item:", error);
+      });
+  }
 };
 
 ///===Function to toggle the completion status of a to-do item===
@@ -100,6 +154,27 @@ const toggleItemCompletion = (id, completed) => {
     })
     .catch((error) => {
       console.error("Failed to toggle item completion:", error);
+      console.log(error.response);
+    });
+};
+//===function to toggle urgent status of a todo item===
+const toggleUrgent = (id, urgent) => {
+  fetch(`/tododb/to_do_list/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      urgent: urgent,
+    }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("urgent status:", data);
+      fetchToDoItems();
+    })
+    .catch((error) => {
+      console.error("Failed to toggle item urgency:", error);
       console.log(error.response);
     });
 };
@@ -127,6 +202,9 @@ const createItem = () => {
     .then((data) => {
       console.log("Created new to-do item:", data);
       fetchToDoItems();
+      $task.val("");
+      $description.val("");
+      $isUrgent.prop("checked", false);
     })
     .catch((error) => {
       console.error("Failed to create new to-do item:", error);
@@ -134,7 +212,7 @@ const createItem = () => {
 };
 
 //===Function to handle the create button click event===
-$("#create").click(() => {
+$("#create").on("click", () => {
   createItem();
 });
 
